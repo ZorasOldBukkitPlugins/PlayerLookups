@@ -37,6 +37,7 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>LICENSE.txt</include>
+                    <include>config.yml</include>
                     <include>plugin.yml</include>
                 </includes>
             </resource>
