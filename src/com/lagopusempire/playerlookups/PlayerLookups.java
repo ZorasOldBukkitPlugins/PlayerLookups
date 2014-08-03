@@ -15,10 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -58,25 +55,6 @@ public class PlayerLookups extends JavaPlugin implements Listener
         cs.registerCommand("lookup uuid", new LookupUUIDCommand());
 
         getServer().getPluginManager().registerEvents(new PlayerLoginListener(connection), this);
-        getServer().getPluginManager().registerEvents(this, this);
-
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerJoin(AsyncPlayerPreLoginEvent event)
-    {
-        System.out.println("this ip has been used by these ids:");
-        Set<UUID> ids = this.getUniqueIdsFromIp(event.getAddress());
-        for (UUID id : ids)
-        {
-            System.out.println(id);
-        }
-
-//        List<PlayerInfoUnion> info = getIps(event.getUniqueId());
-//        for (int ii = 0; ii < info.size(); ii++)
-//        {
-//            System.out.println(info.get(ii).ip);
-//        }
     }
     
     /**
