@@ -14,8 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -66,8 +64,14 @@ public class PlayerLookups extends JavaPlugin implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(AsyncPlayerPreLoginEvent event)
     {
+        System.out.println("this name has been used by these ids:");
+        Set<UUID> ids = this.getUniqueIdsFromName(event.getName());
+        for (UUID id : ids)
+        {
+            System.out.println(id);
+        }
+
 //        List<PlayerInfoUnion> info = getIps(event.getUniqueId());
-//        System.out.println("this player has gone under these ips:");
 //        for (int ii = 0; ii < info.size(); ii++)
 //        {
 //            System.out.println(info.get(ii).ip);
@@ -75,7 +79,44 @@ public class PlayerLookups extends JavaPlugin implements Listener
     }
 
     /**
-     * Gets a set of ip addresses that the server has seen a uuid use
+     * Gets a set of unique ids the server has seen use a certain name <b>THIS
+     * IS A BLOCKING THREAD!</b>
+     *
+     * @param name The name to check
+     * @return A set (order not important) of UUIDS that have used the given
+     * name
+     */
+    public Set<UUID> getUniqueIdsFromName(String name)
+    {
+        final String query = FileParser.getContents("queries/get-uuids-from-name.sql", getClass());
+        try
+        {
+            ResultSet result = connection.query(query)
+                    .setString(name)
+                    .executeReader();
+
+            final Set<UUID> ids = new HashSet<UUID>();
+
+            while (result.next())
+            {
+                ids.add(UUID.fromString(result.getString(1)));
+            }
+
+            result.close();
+
+            return ids;
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Gets a set of ip addresses that the server has seen a uuid use. <b>THIS
+     * IS A BLOCKING THREAD!</b>
      *
      * @param uuid The uuid to check
      * @return A set (order is not maintained) of ips that the server has seen a
