@@ -47,7 +47,7 @@ public class PlayerLookups extends JavaPlugin
         
         cs.registerCommand("lookup uuid", new LookupUUIDCommand());
         
-        getServer().getPluginManager().registerEvents(new PlayerLoginListener(connection), this);
+        getServer().getPluginManager().registerEvents(new PlayerLoginListener(parser, connection), this);
     }
 
     @Override
