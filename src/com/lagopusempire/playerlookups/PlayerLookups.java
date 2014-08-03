@@ -77,6 +77,10 @@ public class PlayerLookups extends JavaPlugin
                 query = parser.getContents("queries/create-pl_ips-table.sql");
                 conn.query(query).executeUpdate();
                 getLogger().info("pl_ips table created successfully.");
+                
+                query = parser.getContents("queries/create-add_player-procedure.sql");
+                conn.query(query).executeUpdate();
+                getLogger().info("add_player procedure created successfully.");
             }
         });
 

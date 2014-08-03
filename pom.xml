@@ -6,7 +6,7 @@
     
     <groupId>com.lagopusempire.playerlookups</groupId>
     <artifactId>PlayerLookups</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <description>Keep track of player names, ids and ip addresses and their relationships</description>
     
     <properties>
