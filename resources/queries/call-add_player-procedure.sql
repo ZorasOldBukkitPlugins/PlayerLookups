@@ -1,1 +1,0 @@
-CALL add_player (?,?,?);

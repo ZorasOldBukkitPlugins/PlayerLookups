@@ -12,13 +12,14 @@ import org.bukkit.plugin.java.JavaPlugin;
  * This parses a resource file within the jar file. It will take all of the
  * contents and put it on one line. It caches the results so the file is only
  * read through once per run.
+ * 
+ * <b>NOT THREAD SAFE!</b>
  *
  * @author MrZoraman
  *
  */
 public class FileParser
 {
-
     private final Map<String, String> queries;
     private final JavaPlugin plugin;
 
@@ -49,7 +50,7 @@ public class FileParser
             return queries.get(resourcePath);
         }
         else
-        {
+        {            
             InputStream stream = plugin.getResource(resourcePath);
             if (stream == null)
             {
