@@ -17,12 +17,10 @@ public class PlayerLoginListener implements Listener
 {
 
     private final MySqlConnection conn;
-    private final FileParser parser;
 
-    public PlayerLoginListener(FileParser parser, MySqlConnection conn)
+    public PlayerLoginListener(MySqlConnection conn)
     {
         this.conn = conn;
-        this.parser = parser;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -31,11 +29,9 @@ public class PlayerLoginListener implements Listener
         final UUID uuid = event.getUniqueId();
         final String name = event.getName();
         final String ip = event.getAddress().toString().substring(1);
-
-        String query = parser.getContents("queries/call-add_player-procedure.sql");
         try
         {
-            conn.query(query)
+            conn.query("CALL add_player (?,?,?);")
                     .setString(uuid.toString())
                     .setString(name)
                     .setString(ip)
