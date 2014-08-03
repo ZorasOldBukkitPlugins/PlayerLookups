@@ -1,0 +1,12 @@
+--Player Lookups--
+
+uuid, ip and name management system
+- juggles all three
+- name lookups
+- ip lookups
+- uuid lookups
+
+-- commands --
+/lookup name [name] - looks up uuids and ips this name has gone under, along with the current uuid bound to this name (if any)
+/lookup ip [ip] - looks up names and uuids this name has gone under
+/lookup uuid [uuid] - looks up names and ips this uuid has gone under, along with the current name bound to this uuid

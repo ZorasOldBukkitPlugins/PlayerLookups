@@ -1,0 +1,6 @@
+name: ${project.artifactId}
+version: ${project.version}
+description: ${project.description}
+author: MrZoraman
+website: null
+main: ${project.groupId}.${project.artifactId}
