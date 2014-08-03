@@ -1,6 +1,8 @@
 package com.lagopusempire.playerlookups.listeners;
 
+import com.lagopusempire.playerlookups.PlayerLookups;
 import com.lagopusempire.playerlookups.mysql.MySqlConnection;
+import com.lagopusempire.playerlookups.utils.files.FileParser;
 import java.util.UUID;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,7 +32,7 @@ public class PlayerLoginListener implements Listener
         final String ip = event.getAddress().toString().substring(1);
         try
         {
-            conn.query("CALL add_player (?,?,?);")
+            conn.query(FileParser.getContents("queries/call-add_player-procedure", PlayerLookups.class))
                     .setString(uuid.toString())
                     .setString(name)
                     .setString(ip)

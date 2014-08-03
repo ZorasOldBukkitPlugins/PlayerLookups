@@ -13,6 +13,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
+/**
+ * 
+ * @author EvilMidget38
+ */
 public class NameFetcher implements Callable<Map<UUID, String>>
 {
 
