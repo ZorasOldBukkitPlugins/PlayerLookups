@@ -8,6 +8,7 @@ import com.lagopusempire.playerlookups.utils.IUpdateTask;
 import com.lagopusempire.playerlookups.utils.SequentialUpdater;
 import com.lagopusempire.playerlookups.utils.files.FileParser;
 import com.lagopusempire.playerlookups.zorascommandsystem.bukkitcompat.BukkitCommandSystem;
+import java.net.InetAddress;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -64,8 +65,8 @@ public class PlayerLookups extends JavaPlugin implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(AsyncPlayerPreLoginEvent event)
     {
-        System.out.println("this name has been used by these ids:");
-        Set<UUID> ids = this.getUniqueIdsFromName(event.getName());
+        System.out.println("this ip has been used by these ids:");
+        Set<UUID> ids = this.getUniqueIdsFromIp(event.getAddress());
         for (UUID id : ids)
         {
             System.out.println(id);
@@ -77,9 +78,53 @@ public class PlayerLookups extends JavaPlugin implements Listener
 //            System.out.println(info.get(ii).ip);
 //        }
     }
+    
+    /**
+     * See {@link #getUniqueIdsFromIp(java.lang.String)}
+     * @param addr The address to check
+     * @return A set of ips that have used the given address
+     */
+    public Set<UUID> getUniqueIdsFromIp(InetAddress addr)
+    {
+        return getUniqueIdsFromIp(addr.toString().substring(1));
+    }
+    
+    /**
+     * Gets a set of unique ids the server has seen a certain ip use. <b>THIS
+     * IS A BLOCKING THREAD!</b>
+     * @param ip The ip address to check
+     * @return  A set (order not important) of UUIDS that have used the given ip address
+     */
+    public Set<UUID> getUniqueIdsFromIp(String ip)
+    {
+        final String query = FileParser.getContents("queries/get-uuids-from-ip.sql", getClass());
+        try
+        {
+            ResultSet result = connection.query(query)
+                    .setString(ip)
+                    .executeReader();
+
+            final Set<UUID> ids = new HashSet<UUID>();
+
+            while (result.next())
+            {
+                ids.add(UUID.fromString(result.getString(1)));
+            }
+
+            result.close();
+
+            return ids;
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     /**
-     * Gets a set of unique ids the server has seen use a certain name <b>THIS
+     * Gets a set of unique ids the server has seen use a certain name use. <b>THIS
      * IS A BLOCKING THREAD!</b>
      *
      * @param name The name to check
