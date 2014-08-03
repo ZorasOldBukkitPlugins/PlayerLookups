@@ -8,6 +8,8 @@ import com.lagopusempire.playerlookups.utils.IUpdateTask;
 import com.lagopusempire.playerlookups.utils.SequentialUpdater;
 import com.lagopusempire.playerlookups.utils.files.FileParser;
 import com.lagopusempire.playerlookups.zorascommandsystem.bukkitcompat.BukkitCommandSystem;
+import java.util.List;
+import java.util.UUID;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,13 +19,11 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class PlayerLookups extends JavaPlugin
 {
-    private final FileParser parser;
     private final BukkitCommandSystem cs;
 
     public PlayerLookups()
     {
         super();
-        this.parser = new FileParser(this);
         this.cs = new BukkitCommandSystem(this);
     }
 
@@ -48,6 +48,16 @@ public class PlayerLookups extends JavaPlugin
         cs.registerCommand("lookup uuid", new LookupUUIDCommand());
         
         getServer().getPluginManager().registerEvents(new PlayerLoginListener(connection), this);
+        
+        getNames(null);
+    }
+    
+    public List<String> getNames(UUID uuid)
+    {
+        final String query = FileParser.getContents("queries/get-names-from-uuid.sql", getClass());
+        System.out.println(query);
+        final String query2 = FileParser.getContents("queries/get-names-from-uuid.sql", getClass());
+        return null;
     }
 
     @Override
@@ -66,19 +76,19 @@ public class PlayerLookups extends JavaPlugin
             @Override
             public void runUpdate() throws Exception
             {
-                String query = parser.getContents("queries/create-pl_uuids-table.sql");
+                String query = FileParser.getContents("queries/create-pl_uuids-table.sql", PlayerLookups.class);
                 conn.query(query).executeUpdate();
                 getLogger().info("pl_uuids table created successfully.");
 
-                query = parser.getContents("queries/create-pl_names-table.sql");
+                query = FileParser.getContents("queries/create-pl_names-table.sql", PlayerLookups.class);
                 conn.query(query).executeUpdate();
                 getLogger().info("pl_names table created successfully.");
 
-                query = parser.getContents("queries/create-pl_ips-table.sql");
+                query = FileParser.getContents("queries/create-pl_ips-table.sql", PlayerLookups.class);
                 conn.query(query).executeUpdate();
                 getLogger().info("pl_ips table created successfully.");
                 
-                query = parser.getContents("queries/create-add_player-procedure.sql");
+                query = FileParser.getContents("queries/create-add_player-procedure.sql", PlayerLookups.class);
                 conn.query(query).executeUpdate();
                 getLogger().info("add_player procedure created successfully.");
             }
