@@ -10,7 +10,9 @@ import com.lagopusempire.playerlookups.utils.files.FileParser;
 import com.lagopusempire.playerlookups.zorascommandsystem.bukkitcompat.BukkitCommandSystem;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -59,21 +61,27 @@ public class PlayerLookups extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(new PlayerLoginListener(connection), this);
         getServer().getPluginManager().registerEvents(this, this);
 
-        
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(AsyncPlayerPreLoginEvent event)
     {
-        List<PlayerInfoUnion> info = getIps(event.getUniqueId());
-        System.out.println("this player has gone under these ips:");
-        for (int ii = 0; ii < info.size(); ii++)
-        {
-            System.out.println(info.get(ii).ip);
-        }
+//        List<PlayerInfoUnion> info = getIps(event.getUniqueId());
+//        System.out.println("this player has gone under these ips:");
+//        for (int ii = 0; ii < info.size(); ii++)
+//        {
+//            System.out.println(info.get(ii).ip);
+//        }
     }
-    
-    public List<PlayerInfoUnion> getIps(UUID uuid)
+
+    /**
+     * Gets a set of ip addresses that the server has seen a uuid use
+     *
+     * @param uuid The uuid to check
+     * @return A set (order is not maintained) of ips that the server has seen a
+     * uuid use
+     */
+    public Set<PlayerInfoUnion> getIps(UUID uuid)
     {
         final String query = FileParser.getContents("queries/get-ips-from-uuid.sql", getClass());
         try
@@ -82,20 +90,19 @@ public class PlayerLookups extends JavaPlugin implements Listener
                     .setString(uuid.toString())
                     .executeReader();
 
-            final List<PlayerInfoUnion> names = new ArrayList<PlayerInfoUnion>();
+            final Set<PlayerInfoUnion> ips = new HashSet<PlayerInfoUnion>();
 
             while (result.next())
             {
-                System.out.println("found one");
                 PlayerInfoUnion info = new PlayerInfoUnion();
                 info.uuid = uuid;
                 info.ip = result.getString(1);
-                names.add(info);
+                ips.add(info);
             }
 
             result.close();
 
-            return names;
+            return ips;
 
         }
         catch (Exception e)
@@ -106,7 +113,8 @@ public class PlayerLookups extends JavaPlugin implements Listener
     }
 
     /**
-     * Gets a list of names the server has seen a uuid go by. <b>THIS IS A BLOCKING THREAD!</b>
+     * Gets a list of names the server has seen a uuid go by. <b>THIS IS A
+     * BLOCKING THREAD!</b>
      *
      * @param uuid The uuid to check
      * @return A list of PlayerInfoUnions, which will contain the date of the
@@ -126,7 +134,6 @@ public class PlayerLookups extends JavaPlugin implements Listener
 
             while (result.next())
             {
-                System.out.println("found one");
                 PlayerInfoUnion info = new PlayerInfoUnion();
                 info.uuid = uuid;
                 info.name = result.getString(1);
