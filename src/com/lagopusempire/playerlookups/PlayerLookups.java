@@ -59,16 +59,49 @@ public class PlayerLookups extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(new PlayerLoginListener(connection), this);
         getServer().getPluginManager().registerEvents(this, this);
 
+        
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(AsyncPlayerPreLoginEvent event)
     {
-        List<PlayerInfoUnion> info = getNames(event.getUniqueId());
-        System.out.println("this player has gone under these names:");
+        List<PlayerInfoUnion> info = getIps(event.getUniqueId());
+        System.out.println("this player has gone under these ips:");
         for (int ii = 0; ii < info.size(); ii++)
         {
-            System.out.println(info.get(ii).name + "\t" + info.get(ii).date);
+            System.out.println(info.get(ii).ip);
+        }
+    }
+    
+    public List<PlayerInfoUnion> getIps(UUID uuid)
+    {
+        final String query = FileParser.getContents("queries/get-ips-from-uuid.sql", getClass());
+        try
+        {
+            ResultSet result = connection.query(query)
+                    .setString(uuid.toString())
+                    .executeReader();
+
+            final List<PlayerInfoUnion> names = new ArrayList<PlayerInfoUnion>();
+
+            while (result.next())
+            {
+                System.out.println("found one");
+                PlayerInfoUnion info = new PlayerInfoUnion();
+                info.uuid = uuid;
+                info.ip = result.getString(1);
+                names.add(info);
+            }
+
+            result.close();
+
+            return names;
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
         }
     }
 

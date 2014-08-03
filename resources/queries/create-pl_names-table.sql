@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS pl_names (
   `timestamp` TIMESTAMP,
   FOREIGN KEY (`player_id`) REFERENCES pl_uuids(`id`)
     ON UPDATE CASCADE
-	ON DELETE CASCADE
+    ON DELETE CASCADE
 ) ENGINE=InnoDB;
