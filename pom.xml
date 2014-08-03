@@ -41,6 +41,13 @@
                     <include>plugin.yml</include>
                 </includes>
             </resource>
+            <resource>
+                <directory>resources/queries</directory>
+                <includes>
+                    <include>*.sql</include>
+                </includes>
+                <targetPath>queries</targetPath>
+            </resource>
         </resources>
         <plugins>
             <plugin>
