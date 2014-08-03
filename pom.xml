@@ -43,10 +43,10 @@
             </resource>
             <resource>
                 <directory>resources/queries</directory>
+                <targetPath>queries</targetPath>
                 <includes>
                     <include>*.sql</include>
                 </includes>
-                <targetPath>queries</targetPath>
             </resource>
         </resources>
         <plugins>
