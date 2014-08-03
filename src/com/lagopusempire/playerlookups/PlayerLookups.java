@@ -26,6 +26,9 @@ public class PlayerLookups extends JavaPlugin
     @Override
     public void onEnable()
     {
+        getConfig().options().copyDefaults(true);
+        saveConfig();
+        
         final MySqlCreds creds = new MySqlCreds(
                 getConfig().getString("mysql.host"),
                 getConfig().getInt("mysql.port"),
@@ -34,7 +37,9 @@ public class PlayerLookups extends JavaPlugin
                 getConfig().getString("mysql.password"));
         
         MySqlConnection connection = new MySqlConnection(getLogger(), creds);
-        updateSchema(getConfig().getInt("mysql.schema-version", 0), connection);
+        int schemaVersion = updateSchema(getConfig().getInt("mysql.schema-version", 0), connection);
+        getConfig().set("mysql.schema-version", schemaVersion);
+        saveConfig();
     }
 
     @Override
