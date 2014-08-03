@@ -11,6 +11,7 @@ import java.util.Set;
 /**
  * 
  * @author MrZoraman
+ * @param <T> Type type of command that will be used
  */
 public class CommandSystem<T>
 {
