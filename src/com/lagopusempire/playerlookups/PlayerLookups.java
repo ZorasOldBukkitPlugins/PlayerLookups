@@ -1,6 +1,8 @@
 package com.lagopusempire.playerlookups;
 
 import com.lagopusempire.playerlookups.commands.LookupUUIDCommand;
+import com.lagopusempire.playerlookups.evilmidget38.NameFetcher;
+import com.lagopusempire.playerlookups.evilmidget38.UUIDFetcher;
 import com.lagopusempire.playerlookups.listeners.PlayerLoginListener;
 import com.lagopusempire.playerlookups.mysql.MySqlConnection;
 import com.lagopusempire.playerlookups.mysql.MySqlCreds;
@@ -11,6 +13,7 @@ import com.lagopusempire.playerlookups.zorascommandsystem.bukkitcompat.BukkitCom
 import java.net.InetAddress;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -93,6 +96,46 @@ public class PlayerLookups extends JavaPlugin implements Listener
 
             return ids;
 
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    /**
+     * Uses evilmidget38's uuidfetcher to get a uuid given a player name. <b>THIS
+     * IS A BLOCKING THREAD!</b>
+     * @param name The name of the player
+     * @return The player's uuid
+     */
+    public UUID getCurrentUniqueIdUsingName(String name)
+    {
+        final UUIDFetcher fetcher = new UUIDFetcher(Arrays.asList(name));
+        try
+        {
+            return fetcher.call().get(name);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    /**
+     * Uses evilmidget38's namefetcher to get a name given a uuid. <b>THIS
+     * IS A BLOCKING THREAD!</b>
+     * @param uuid The uud to lookup
+     * @return The current name the uuid is using
+     */
+    public String getCurrentNameUsingUUID(UUID uuid)
+    {
+        final NameFetcher fetcher = new NameFetcher(Arrays.asList(uuid));
+        try
+        {
+            return fetcher.call().get(uuid);
         }
         catch (Exception e)
         {
