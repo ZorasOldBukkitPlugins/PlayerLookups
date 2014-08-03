@@ -1,6 +1,7 @@
 package com.lagopusempire.playerlookups;
 
 import com.lagopusempire.playerlookups.commands.LookupUUIDCommand;
+import com.lagopusempire.playerlookups.listeners.PlayerLoginListener;
 import com.lagopusempire.playerlookups.mysql.MySqlConnection;
 import com.lagopusempire.playerlookups.mysql.MySqlCreds;
 import com.lagopusempire.playerlookups.utils.IUpdateTask;
@@ -45,6 +46,8 @@ public class PlayerLookups extends JavaPlugin
         saveConfig();
         
         cs.registerCommand("lookup uuid", new LookupUUIDCommand());
+        
+        getServer().getPluginManager().registerEvents(new PlayerLoginListener(connection), this);
     }
 
     @Override
