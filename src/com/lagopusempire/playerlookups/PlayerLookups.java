@@ -1,10 +1,12 @@
 package com.lagopusempire.playerlookups;
 
+import com.lagopusempire.playerlookups.commands.LookupUUIDCommand;
 import com.lagopusempire.playerlookups.mysql.MySqlConnection;
 import com.lagopusempire.playerlookups.mysql.MySqlCreds;
 import com.lagopusempire.playerlookups.utils.IUpdateTask;
 import com.lagopusempire.playerlookups.utils.SequentialUpdater;
 import com.lagopusempire.playerlookups.utils.files.FileParser;
+import com.lagopusempire.playerlookups.zorascommandsystem.bukkitcompat.BukkitCommandSystem;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,13 +16,14 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class PlayerLookups extends JavaPlugin
 {
-
     private final FileParser parser;
+    private final BukkitCommandSystem cs;
 
     public PlayerLookups()
     {
         super();
         this.parser = new FileParser(this);
+        this.cs = new BukkitCommandSystem(this);
     }
 
     @Override
@@ -40,6 +43,8 @@ public class PlayerLookups extends JavaPlugin
         int schemaVersion = updateSchema(getConfig().getInt("mysql.schema-version", 0), connection);
         getConfig().set("mysql.schema-version", schemaVersion);
         saveConfig();
+        
+        cs.registerCommand("lookup uuid", new LookupUUIDCommand());
     }
 
     @Override

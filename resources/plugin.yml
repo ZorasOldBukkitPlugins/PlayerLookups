@@ -4,3 +4,5 @@ description: ${project.description}
 author: MrZoraman
 website: null
 main: ${project.groupId}.${project.artifactId}
+commands:
+  lookup:
