@@ -2,10 +2,9 @@ package com.lagopusempire.playerlookups.mysql;
 
 /**
  *
- * This class stores the credentials needed to connect to a
- * {@link com.mrz.dyndns.server.base.mysql.SimpleMySql SimpleMySql} database
+ * This class stores the credentials needed to connect to a Mysql database
  *
- * @author Zora
+ * @author MrZoraman
  */
 public class MySqlCreds
 {
