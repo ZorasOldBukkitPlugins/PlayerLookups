@@ -1,7 +1,6 @@
 package com.lagopusempire.playerlookups.listeners;
 
 import com.lagopusempire.playerlookups.mysql.MySqlConnection;
-import com.lagopusempire.playerlookups.utils.files.FileParser;
 import java.util.UUID;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

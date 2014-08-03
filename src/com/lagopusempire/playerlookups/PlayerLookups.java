@@ -8,18 +8,27 @@ import com.lagopusempire.playerlookups.utils.IUpdateTask;
 import com.lagopusempire.playerlookups.utils.SequentialUpdater;
 import com.lagopusempire.playerlookups.utils.files.FileParser;
 import com.lagopusempire.playerlookups.zorascommandsystem.bukkitcompat.BukkitCommandSystem;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * @author MrZoraman
  */
-public class PlayerLookups extends JavaPlugin
+public class PlayerLookups extends JavaPlugin implements Listener
 {
+
     private final BukkitCommandSystem cs;
+
+    private MySqlConnection connection;
 
     public PlayerLookups()
     {
@@ -32,38 +41,76 @@ public class PlayerLookups extends JavaPlugin
     {
         getConfig().options().copyDefaults(true);
         saveConfig();
-        
+
         final MySqlCreds creds = new MySqlCreds(
                 getConfig().getString("mysql.host"),
                 getConfig().getInt("mysql.port"),
                 getConfig().getString("mysql.database"),
                 getConfig().getString("mysql.user"),
                 getConfig().getString("mysql.password"));
-        
-        MySqlConnection connection = new MySqlConnection(getLogger(), creds);
+
+        this.connection = new MySqlConnection(getLogger(), creds);
         int schemaVersion = updateSchema(getConfig().getInt("mysql.schema-version", 0), connection);
         getConfig().set("mysql.schema-version", schemaVersion);
         saveConfig();
-        
+
         cs.registerCommand("lookup uuid", new LookupUUIDCommand());
-        
+
         getServer().getPluginManager().registerEvents(new PlayerLoginListener(connection), this);
-        
-        getNames(null);
-    }
-    
-    public List<String> getNames(UUID uuid)
-    {
-        final String query = FileParser.getContents("queries/get-names-from-uuid.sql", getClass());
-        System.out.println(query);
-        final String query2 = FileParser.getContents("queries/get-names-from-uuid.sql", getClass());
-        return null;
+        getServer().getPluginManager().registerEvents(this, this);
+
     }
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args)
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerJoin(AsyncPlayerPreLoginEvent event)
     {
-        return true;
+        List<PlayerInfoUnion> info = getNames(event.getUniqueId());
+        System.out.println("this player has gone under these names:");
+        for (int ii = 0; ii < info.size(); ii++)
+        {
+            System.out.println(info.get(ii).name + "\t" + info.get(ii).date);
+        }
+    }
+
+    /**
+     * Gets a list of names the server has seen a uuid go by. <b>THIS IS A BLOCKING THREAD!</b>
+     *
+     * @param uuid The uuid to check
+     * @return A list of PlayerInfoUnions, which will contain the date of the
+     * uuid, the name and the date the name was last seen used. The names will
+     * be in order from oldest to most recent.
+     */
+    public List<PlayerInfoUnion> getNames(UUID uuid)
+    {
+        final String query = FileParser.getContents("queries/get-names-from-uuid.sql", getClass());
+        try
+        {
+            ResultSet result = connection.query(query)
+                    .setString(uuid.toString())
+                    .executeReader();
+
+            final List<PlayerInfoUnion> names = new ArrayList<PlayerInfoUnion>();
+
+            while (result.next())
+            {
+                System.out.println("found one");
+                PlayerInfoUnion info = new PlayerInfoUnion();
+                info.uuid = uuid;
+                info.name = result.getString(1);
+                info.date = result.getDate(2);
+                names.add(info);
+            }
+
+            result.close();
+
+            return names;
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private int updateSchema(int currentVersion, final MySqlConnection conn)
@@ -87,7 +134,7 @@ public class PlayerLookups extends JavaPlugin
                 query = FileParser.getContents("queries/create-pl_ips-table.sql", PlayerLookups.class);
                 conn.query(query).executeUpdate();
                 getLogger().info("pl_ips table created successfully.");
-                
+
                 query = FileParser.getContents("queries/create-add_player-procedure.sql", PlayerLookups.class);
                 conn.query(query).executeUpdate();
                 getLogger().info("add_player procedure created successfully.");
