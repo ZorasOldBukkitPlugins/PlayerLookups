@@ -43,11 +43,11 @@ public class LookupUUIDCommand implements CSBukkitCommand
 
         if (args.length < 1)
         {
-            sender.sendMessage(new Formatter(plugin.getConfig().getString("not-enough-args"))
+            sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.not-enough-args"))
                     .colorize()
                     .toString());
 
-            sender.sendMessage(new Formatter(plugin.getConfig().getString("lookup-uuid-command-usage"))
+            sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.lookup-uuid-command-usage"))
                     .colorize()
                     .toString());
             return true;
@@ -83,7 +83,7 @@ public class LookupUUIDCommand implements CSBukkitCommand
 
     private boolean noPermissions(CommandSender sender)
     {
-        sender.sendMessage(new Formatter(plugin.getConfig().getString("no-permissions"))
+        sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.no-permissions"))
                 .colorize()
                 .toString());
         return true;
@@ -106,11 +106,11 @@ public class LookupUUIDCommand implements CSBukkitCommand
                     public void run()
                     {
                         //SYNC
-                        Formatter header = new Formatter(plugin.getConfig().getString("uuids-from-ip-result-header"))
+                        Formatter header = new Formatter(plugin.getConfig().getString("strings.uuids-from-ip-result-header"))
                                 .setIp(ip)
                                 .colorize();
                         
-                        Formatter messagePart = new Formatter(plugin.getConfig().getString("uuids-from-ip-result"))
+                        Formatter messagePart = new Formatter(plugin.getConfig().getString("strings.uuids-from-ip-result"))
                                 .colorize();
                         
                         Player player = null;
