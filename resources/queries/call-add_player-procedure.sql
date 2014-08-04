@@ -1,1 +1,1 @@
-CALL add_player (?,?,?);
+CALL pl_add_player (?,?,?);

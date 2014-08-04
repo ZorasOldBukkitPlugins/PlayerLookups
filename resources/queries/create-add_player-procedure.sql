@@ -1,4 +1,4 @@
-CREATE PROCEDURE add_player (IN uuid VARCHAR(36), IN player_name VARCHAR(32), IN ip VARCHAR(16))
+CREATE PROCEDURE pl_add_player (IN uuid VARCHAR(36), IN player_name VARCHAR(32), IN ip VARCHAR(16))
 BEGIN	
     DECLARE most_recent_name VARCHAR(32);
     DECLARE most_recent_ip VARCHAR(32);
