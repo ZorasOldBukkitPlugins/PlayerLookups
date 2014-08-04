@@ -42,4 +42,11 @@ public class UuidUtils
 //		System.out.println(dashlessUuid.length());
         return UUID.fromString(builder.toString());
     }
+    
+    public static boolean isUUID(String uuid)
+    {
+        if(uuid == null)
+            return false;
+        return uuid.matches("[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}");
+    }
 }
