@@ -8,9 +8,10 @@ uuid, ip and name management system
 - uuid lookups
 
 -- commands --
-/lookup name [name] - looks up uuids and ips this name has gone under, along with the current uuid bound to this name (if any)
-/lookup ip [ip] - looks up names and uuids this name has gone under
-/lookup uuid [uuid] - looks up names and ips this uuid has gone under, along with the current name bound to this uuid
+/lookup ip(s) [uuid] - gets a list of ips a uuid has used
+/lookup name(s) [uuid] - gets a list of names a uuid has used
+/lookup uuid(s) [ip] - gets a list of uuids an ip has used
+/lookup uuid(s) [name] - gets a list of uuids a name has used
 
 -- clipboard-like feature --
 Players are able to 'copy' ips/uuids/names to their clipboard and insert them into any command. Each entry in a list of
