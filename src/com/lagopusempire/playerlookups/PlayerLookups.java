@@ -14,9 +14,7 @@ import java.net.InetAddress;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -63,20 +61,20 @@ public class PlayerLookups extends JavaPlugin implements Listener
     /**
      * See {@link #getUniqueIdsFromIp(java.lang.String)}
      * @param addr The address to check
-     * @return A set of ips that have used the given address
+     * @return A list of ips that have used the given address
      */
-    public Set<UUID> getUniqueIdsFromIp(InetAddress addr)
+    public List<UUID> getUniqueIdsFromIp(InetAddress addr)
     {
         return getUniqueIdsFromIp(addr.toString().substring(1));
     }
     
     /**
-     * Gets a set of unique ids the server has seen a certain ip use. <b>THIS
+     * Gets a list of unique ids the server has seen a certain ip use. <b>THIS
      * IS A BLOCKING THREAD!</b>
      * @param ip The ip address to check
-     * @return  A set (order not important) of UUIDS that have used the given ip address
+     * @return  A list (order not important) of UUIDS that have used the given ip address
      */
-    public Set<UUID> getUniqueIdsFromIp(String ip)
+    public List<UUID> getUniqueIdsFromIp(String ip)
     {
         final String query = FileParser.getContents("queries/get-uuids-from-ip.sql", getClass());
         try
@@ -85,7 +83,7 @@ public class PlayerLookups extends JavaPlugin implements Listener
                     .setString(ip)
                     .executeReader();
 
-            final Set<UUID> ids = new HashSet<UUID>();
+            final List<UUID> ids = new ArrayList<UUID>();
 
             while (result.next())
             {
@@ -145,14 +143,14 @@ public class PlayerLookups extends JavaPlugin implements Listener
     }
 
     /**
-     * Gets a set of unique ids the server has seen use a certain name use. <b>THIS
+     * Gets a list of unique ids the server has seen use a certain name use. <b>THIS
      * IS A BLOCKING THREAD!</b>
      *
      * @param name The name to check
-     * @return A set (order not important) of UUIDS that have used the given
+     * @return A list (order not important) of UUIDS that have used the given
      * name
      */
-    public Set<UUID> getUniqueIdsFromName(String name)
+    public List<UUID> getUniqueIdsFromName(String name)
     {
         final String query = FileParser.getContents("queries/get-uuids-from-name.sql", getClass());
         try
@@ -161,7 +159,7 @@ public class PlayerLookups extends JavaPlugin implements Listener
                     .setString(name)
                     .executeReader();
 
-            final Set<UUID> ids = new HashSet<UUID>();
+            final List<UUID> ids = new ArrayList<UUID>();
 
             while (result.next())
             {
@@ -181,14 +179,14 @@ public class PlayerLookups extends JavaPlugin implements Listener
     }
 
     /**
-     * Gets a set of ip addresses that the server has seen a uuid use. <b>THIS
+     * Gets a list of ip addresses that the server has seen a uuid use. <b>THIS
      * IS A BLOCKING THREAD!</b>
      *
      * @param uuid The uuid to check
-     * @return A set (order is not maintained) of ips that the server has seen a
+     * @return A list (order is not maintained) of ips that the server has seen a
      * uuid use
      */
-    public Set<PlayerInfoUnion> getIps(UUID uuid)
+    public List<PlayerInfoUnion> getIps(UUID uuid)
     {
         final String query = FileParser.getContents("queries/get-ips-from-uuid.sql", getClass());
         try
@@ -197,7 +195,7 @@ public class PlayerLookups extends JavaPlugin implements Listener
                     .setString(uuid.toString())
                     .executeReader();
 
-            final Set<PlayerInfoUnion> ips = new HashSet<PlayerInfoUnion>();
+            final List<PlayerInfoUnion> ips = new ArrayList<PlayerInfoUnion>();
 
             while (result.next())
             {

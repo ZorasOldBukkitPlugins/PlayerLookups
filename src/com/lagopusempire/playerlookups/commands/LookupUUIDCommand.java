@@ -6,7 +6,7 @@ import com.lagopusempire.playerlookups.utils.Formatter;
 import com.lagopusempire.playerlookups.utils.IpUtils;
 import com.lagopusempire.playerlookups.utils.MetadataUtils;
 import com.lagopusempire.playerlookups.zorascommandsystem.bukkitcompat.CSBukkitCommand;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -98,7 +98,7 @@ public class LookupUUIDCommand implements CSBukkitCommand
             public void run()
             {
                 //ASYNC
-                final Set<UUID> uuids = plugin.getUniqueIdsFromIp(ip);
+                final List<UUID> uuids = plugin.getUniqueIdsFromIp(ip);
 
                 Bukkit.getScheduler().runTask(plugin, new Runnable()
                 {
