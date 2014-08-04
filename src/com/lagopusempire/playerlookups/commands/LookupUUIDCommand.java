@@ -111,31 +111,31 @@ public class LookupUUIDCommand implements CSBukkitCommand
                         Formatter header = new Formatter(plugin.getConfig().getString("strings.uuids-from-ip-result-header"))
                                 .setIp(ip)
                                 .colorize();
-                        
+
                         Formatter messagePart = new Formatter(plugin.getConfig().getString("strings.uuids-from-ip-result"))
                                 .colorize();
-                        
+
                         Player player = null;
-                        if(sender instanceof Player)
+                        if (sender instanceof Player)
                         {
                             player = (Player) sender;
                         }
-                        
-                        if(player == null)
+
+                        if (player == null)
                         {
                             sender.sendMessage(header.toString());
-                            
+
                             Clipboard consoleClipboard = new Clipboard(null, plugin);
-                            
-                            for(int ii = 0; ii < uuids.size(); ii++)
+
+                            for (int ii = 0; ii < uuids.size(); ii++)
                             {
                                 String uuid = uuids.get(ii).toString();
-                                
+
                                 sender.sendMessage(messagePart.dup()
                                         .setUUID(uuid)
                                         .setNumber(ii)
                                         .toString());
-                                
+
                                 consoleClipboard.setUUID(ii, uuid);
                             }
                         }
@@ -143,21 +143,23 @@ public class LookupUUIDCommand implements CSBukkitCommand
                         {
                             metadata.setMetadata(player, "lookup_pages", uuids);
                             Clipboard clipboard = new Clipboard(player, plugin);
-                            
+
                             player.sendMessage(header.toString());
-                            
-                            for(int ii = 0; ii < ListPrinter.PAGE_LENGTH(); ii++)
+
+                            for (int ii = 0; ii < ListPrinter.PAGE_LENGTH(); ii++)
                             {
-                                if(uuids.size() == ii)
+                                if (uuids.size() == ii)
+                                {
                                     break;
-                                
+                                }
+
                                 String uuid = uuids.get(ii).toString();
-                                
+
                                 player.sendMessage(messagePart.dup()
                                         .setUUID(uuid)
                                         .setNumber(ii)
                                         .toString());
-                                
+
                                 clipboard.setUUID(ii, uuid);
                             }
                         }
@@ -168,8 +170,80 @@ public class LookupUUIDCommand implements CSBukkitCommand
     }
 
     //ASYNC
-    private void lookupUUIDSfromName(CommandSender sender, String name)
+    private void lookupUUIDSfromName(final CommandSender sender, final String name)
     {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                //ASYNC
+                final List<UUID> uuids = plugin.getUniqueIdsFromName(name);
 
+                Bukkit.getScheduler().runTask(plugin, new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        //SYNC
+                        Formatter header = new Formatter(plugin.getConfig().getString("strings.uuids-from-name-result-header"))
+                                .setName(name)
+                                .colorize();
+
+                        Formatter messagePart = new Formatter(plugin.getConfig().getString("strings.uuids-from-name-result"))
+                                .colorize();
+
+                        Player player = null;
+                        if (sender instanceof Player)
+                        {
+                            player = (Player) sender;
+                        }
+
+                        if (player == null)
+                        {
+                            sender.sendMessage(header.toString());
+
+                            Clipboard consoleClipboard = new Clipboard(null, plugin);
+
+                            for (int ii = 0; ii < uuids.size(); ii++)
+                            {
+                                String uuid = uuids.get(ii).toString();
+
+                                sender.sendMessage(messagePart.dup()
+                                        .setUUID(uuid)
+                                        .setNumber(ii)
+                                        .toString());
+
+                                consoleClipboard.setName(ii, uuid);
+                            }
+                        }
+                        else
+                        {
+                            metadata.setMetadata(player, "lookup_pages", uuids);
+                            Clipboard clipboard = new Clipboard(player, plugin);
+
+                            player.sendMessage(header.toString());
+
+                            for (int ii = 0; ii < ListPrinter.PAGE_LENGTH(); ii++)
+                            {
+                                if (uuids.size() == ii)
+                                {
+                                    break;
+                                }
+
+                                String uuid = uuids.get(ii).toString();
+
+                                player.sendMessage(messagePart.dup()
+                                        .setUUID(uuid)
+                                        .setNumber(ii)
+                                        .toString());
+
+                                clipboard.setName(ii, uuid);
+                            }
+                        }
+                    }
+                });
+            }
+        });
     }
 }
