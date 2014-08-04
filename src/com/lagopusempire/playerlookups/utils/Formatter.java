@@ -16,10 +16,10 @@ public class Formatter
 {
     private static final char COLOR_CHAR = '&';
     
-    private static final String PLAYER_STRING = "%player%";
-    private static final String SENDER_STRING = "%sender%";
-    private static final String RECIEVER_STRING = "%reciever%";
-    private static final String MESSAGE_STRING = "%message%";
+    private static final String NAME_STRING = "%name%";
+    private static final String IP_STRING = "%ip%";
+    private static final String UUID_STRING = "%uuid%";
+    private static final String NUMBER_STRING = "%#%";
     
     private String message;
     
@@ -40,27 +40,27 @@ public class Formatter
         return this;
     }
     
-    public Formatter setPlayer(String name)
+    public Formatter setName(String name)
     {
-        this.message = message.replaceAll(PLAYER_STRING, name);
+        this.message = message.replaceAll(NAME_STRING, name);
         return this;
     }
     
-    public Formatter setSender(String name)
+    public Formatter setIp(String ip)
     {
-        this.message = message.replaceAll(SENDER_STRING, name);
+        this.message = message.replaceAll(IP_STRING, ip);
         return this;
     }
     
-    public Formatter setReciever(String name)
+    public Formatter setUUID(String uuid)
     {
-        this.message = message.replaceAll(RECIEVER_STRING, name);
+        this.message = message.replaceAll(UUID_STRING, uuid);
         return this;
     }
     
-    public Formatter setMessage(String message)
+    public Formatter setNumber(int number)
     {
-        this.message = this.message.replaceAll(MESSAGE_STRING, message);
+        this.message = this.message.replaceAll(NUMBER_STRING, String.valueOf(number));
         return this;
     }
     
