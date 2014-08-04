@@ -28,6 +28,11 @@ public class Formatter
         this.message = message;
     }
     
+    public Formatter dup()
+    {
+        return new Formatter(message);
+    }
+    
     public Formatter colorize()
     {
         this.message = ChatColor.translateAlternateColorCodes(COLOR_CHAR, message);

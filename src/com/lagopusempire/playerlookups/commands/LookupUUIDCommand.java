@@ -124,9 +124,12 @@ public class LookupUUIDCommand implements CSBukkitCommand
                             //TODO: console clipboard
                             sender.sendMessage(header.decolorize().toString());
                             
+                            System.out.println(uuids);
+                            
                             for(UUID uuid : uuids)
                             {
-                                sender.sendMessage(messagePart
+                                //THIS IS NO GOOD I FOOD NOW
+                                sender.sendMessage(messagePart.dup()
                                         .setUUID(uuid.toString())
                                         .decolorize()
                                         .toString());
