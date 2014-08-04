@@ -15,3 +15,4 @@ strings:
   uuids-from-ip-result: '&f[%#%] &6%uuid%'
   uuids-from-name-result-header: '&6UUIDS that have used the name &b%name%&6:'
   uuids-from-name-result: '&f[%#%] &6%uuid%'
+  uuids-from-name-current: '&f[%#%] &7The current uuid that is using this name is: &6%uuid%'

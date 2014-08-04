@@ -179,6 +179,7 @@ public class LookupUUIDCommand implements CSBukkitCommand
             {
                 //ASYNC
                 final List<UUID> uuids = plugin.getUniqueIdsFromName(name);
+                final UUID currentNameOwner = plugin.getCurrentUniqueIdUsingName(name);
 
                 Bukkit.getScheduler().runTask(plugin, new Runnable()
                 {
@@ -193,17 +194,22 @@ public class LookupUUIDCommand implements CSBukkitCommand
                         Formatter messagePart = new Formatter(plugin.getConfig().getString("strings.uuids-from-name-result"))
                                 .colorize();
 
+                        Formatter currentUserMessage = new Formatter(plugin.getConfig().getString("strings.uuids-from-name-current"))
+                                .colorize();
+
                         Player player = null;
                         if (sender instanceof Player)
                         {
                             player = (Player) sender;
                         }
+                        
+                        Clipboard clipboard;
 
                         if (player == null)
                         {
                             sender.sendMessage(header.toString());
 
-                            Clipboard consoleClipboard = new Clipboard(null, plugin);
+                            clipboard = new Clipboard(null, plugin);
 
                             for (int ii = 0; ii < uuids.size(); ii++)
                             {
@@ -214,13 +220,13 @@ public class LookupUUIDCommand implements CSBukkitCommand
                                         .setNumber(ii)
                                         .toString());
 
-                                consoleClipboard.setName(ii, uuid);
+                                clipboard.setName(ii, uuid);
                             }
                         }
                         else
                         {
                             metadata.setMetadata(player, "lookup_pages", uuids);
-                            Clipboard clipboard = new Clipboard(player, plugin);
+                            clipboard = new Clipboard(player, plugin);
 
                             player.sendMessage(header.toString());
 
@@ -240,6 +246,23 @@ public class LookupUUIDCommand implements CSBukkitCommand
 
                                 clipboard.setName(ii, uuid);
                             }
+                        }
+                        
+                        if(currentNameOwner == null)
+                        {
+                            sender.sendMessage(currentUserMessage
+                                    .setUUID("none")
+                                    .setNumber("X")
+                                    .toString());
+                        }
+                        else
+                        {
+                            clipboard.setUUID(uuids.size(), currentNameOwner.toString());
+
+                            sender.sendMessage(currentUserMessage
+                                    .setUUID(currentNameOwner.toString())
+                                    .setNumber(uuids.size())
+                                    .toString());
                         }
                     }
                 });

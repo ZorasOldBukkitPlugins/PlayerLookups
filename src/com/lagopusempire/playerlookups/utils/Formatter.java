@@ -69,6 +69,12 @@ public class Formatter
         return this;
     }
     
+    public Formatter setNumber(String number)
+    {
+        this.message = this.message.replaceAll(NUMBER_STRING, number);
+        return this;
+    }
+    
     @Override
     public String toString()
     {
