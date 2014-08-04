@@ -1,9 +1,11 @@
 package com.lagopusempire.playerlookups.commands;
 
+import com.lagopusempire.playerlookups.Clipboard;
 import com.lagopusempire.playerlookups.Permissions;
 import com.lagopusempire.playerlookups.PlayerLookups;
 import com.lagopusempire.playerlookups.utils.Formatter;
 import com.lagopusempire.playerlookups.utils.IpUtils;
+import com.lagopusempire.playerlookups.utils.ListPrinter;
 import com.lagopusempire.playerlookups.utils.MetadataUtils;
 import com.lagopusempire.playerlookups.zorascommandsystem.bukkitcompat.CSBukkitCommand;
 import java.util.List;
@@ -121,25 +123,44 @@ public class LookupUUIDCommand implements CSBukkitCommand
                         
                         if(player == null)
                         {
-                            //TODO: console clipboard
-                            sender.sendMessage(header.decolorize().toString());
+                            sender.sendMessage(header.toString());
                             
-                            System.out.println(uuids);
+                            Clipboard consoleClipboard = new Clipboard(null, plugin);
                             
-                            for(UUID uuid : uuids)
+                            for(int ii = 0; ii < uuids.size(); ii++)
                             {
+                                String uuid = uuids.get(ii).toString();
+                                
                                 sender.sendMessage(messagePart.dup()
-                                        .setUUID(uuid.toString())
-                                        .decolorize()
+                                        .setUUID(uuid)
+                                        .setNumber(ii)
                                         .toString());
+                                
+                                consoleClipboard.setUUID(ii, uuid);
                             }
                         }
                         else
                         {
                             metadata.setMetadata(player, "lookup_pages", uuids);
+                            Clipboard clipboard = new Clipboard(player, plugin);
+                            
+                            player.sendMessage(header.toString());
+                            
+                            for(int ii = 0; ii < ListPrinter.PAGE_LENGTH(); ii++)
+                            {
+                                if(uuids.size() == ii)
+                                    break;
+                                
+                                String uuid = uuids.get(ii).toString();
+                                
+                                player.sendMessage(messagePart.dup()
+                                        .setUUID(uuid)
+                                        .setNumber(ii)
+                                        .toString());
+                                
+                                clipboard.setUUID(ii, uuid);
+                            }
                         }
-                        //show page 1
-                        
                     }
                 });
             }
