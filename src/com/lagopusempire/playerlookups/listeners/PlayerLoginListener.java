@@ -32,7 +32,7 @@ public class PlayerLoginListener implements Listener
         final String ip = event.getAddress().toString().substring(1);
         try
         {
-            conn.query(FileParser.getContents("queries/call-add_player-procedure", PlayerLookups.class))
+            conn.query(FileParser.getContents("queries/call-pl_add_player-procedure.sql", PlayerLookups.class))
                     .setString(uuid.toString())
                     .setString(name)
                     .setString(ip)

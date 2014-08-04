@@ -280,9 +280,9 @@ public class PlayerLookups extends JavaPlugin implements Listener
                 conn.query(query).executeUpdate();
                 getLogger().info("pl_ips table created successfully.");
 
-                query = FileParser.getContents("queries/create-add_player-procedure.sql", PlayerLookups.class);
+                query = FileParser.getContents("queries/create-pl_add_player-procedure.sql", PlayerLookups.class);
                 conn.query(query).executeUpdate();
-                getLogger().info("add_player procedure created successfully.");
+                getLogger().info("pl_add_player procedure created successfully.");
             }
         });
 
