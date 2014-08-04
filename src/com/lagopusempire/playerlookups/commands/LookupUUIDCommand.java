@@ -128,7 +128,6 @@ public class LookupUUIDCommand implements CSBukkitCommand
                             
                             for(UUID uuid : uuids)
                             {
-                                //THIS IS NO GOOD I FOOD NOW
                                 sender.sendMessage(messagePart.dup()
                                         .setUUID(uuid.toString())
                                         .decolorize()
