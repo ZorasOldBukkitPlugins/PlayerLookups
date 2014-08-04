@@ -55,7 +55,7 @@ public class PlayerLookups extends JavaPlugin implements Listener
         getConfig().set("mysql.schema-version", schemaVersion);
         saveConfig();
 
-        cs.registerCommand("lookup uuid", new LookupUUIDCommand());
+        cs.registerCommand("lookup uuid", new LookupUUIDCommand(this));
 
         getServer().getPluginManager().registerEvents(new PlayerLoginListener(connection), this);
     }
