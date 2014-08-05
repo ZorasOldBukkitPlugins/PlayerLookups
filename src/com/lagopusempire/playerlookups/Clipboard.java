@@ -12,7 +12,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Clipboard
 {
-
     private static final Map<String, String> consoleValues = new HashMap<String, String>();
 
     private final MetadataUtils metadata;
@@ -35,6 +34,18 @@ public class Clipboard
             metadata.setMetadata(player, "pl_uuid." + index, uuid);
         }
     }
+    
+    public String getUUID(int index)
+    {
+        if(player == null)
+        {
+            return consoleValues.get("pl_uuid." + index);
+        }
+        else
+        {
+            return (String) metadata.getMetadata(player, "pl_uuid." + index);
+        }
+    }
 
     public void setName(int index, String name)
     {
@@ -47,6 +58,18 @@ public class Clipboard
             metadata.setMetadata(player, "pl_name." + index, name);
         }
     }
+    
+    public String getName(int index)
+    {
+        if(player == null)
+        {
+            return consoleValues.get("pl_name." + index);
+        }
+        else
+        {
+            return (String) metadata.getMetadata(player, "pl_name." + index);
+        }
+    }
 
     public void setIp(int index, String ip)
     {
@@ -54,6 +77,21 @@ public class Clipboard
         {
             consoleValues.put("pl_ip." + index, ip);
         }
-        metadata.setMetadata(player, "pl_ip." + index, ip);
+        else
+        {
+            metadata.setMetadata(player, "pl_ip." + index, ip);
+        }
+    }
+    
+    public String getIp(int index)
+    {
+        if(player == null)
+        {
+            return consoleValues.get("pl_ip." + index);
+        }
+        else
+        {
+            return (String) metadata.getMetadata(player, "pl_ip." + index);
+        }
     }
 }

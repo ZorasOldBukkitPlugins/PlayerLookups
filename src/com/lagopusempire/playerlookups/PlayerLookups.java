@@ -3,6 +3,7 @@ package com.lagopusempire.playerlookups;
 import com.lagopusempire.playerlookups.commands.LookupUUIDCommand;
 import com.lagopusempire.playerlookups.evilmidget38.NameFetcher;
 import com.lagopusempire.playerlookups.evilmidget38.UUIDFetcher;
+import com.lagopusempire.playerlookups.listeners.CommandListener;
 import com.lagopusempire.playerlookups.listeners.PlayerLoginListener;
 import com.lagopusempire.playerlookups.mysql.MySqlConnection;
 import com.lagopusempire.playerlookups.mysql.MySqlCreds;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -56,6 +59,19 @@ public class PlayerLookups extends JavaPlugin implements Listener
         cs.registerCommand("lookup uuid", new LookupUUIDCommand(this));
 
         getServer().getPluginManager().registerEvents(new PlayerLoginListener(connection), this);
+        getServer().getPluginManager().registerEvents(new CommandListener(this), this);
+    }
+    
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args)
+    {
+        System.out.println("Command recieved: " + cmd.getName());
+        for(int ii = 0; ii < args.length; ii++)
+        {
+            System.out.print(" " + args[ii]);
+        }
+        
+        return true;
     }
     
     /**
