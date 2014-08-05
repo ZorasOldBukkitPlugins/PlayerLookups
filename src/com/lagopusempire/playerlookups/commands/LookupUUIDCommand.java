@@ -2,12 +2,14 @@ package com.lagopusempire.playerlookups.commands;
 
 import com.lagopusempire.playerlookups.Clipboard;
 import com.lagopusempire.playerlookups.Permissions;
+import com.lagopusempire.playerlookups.PlayerInfoUnion;
 import com.lagopusempire.playerlookups.PlayerLookups;
 import com.lagopusempire.playerlookups.utils.Formatter;
 import com.lagopusempire.playerlookups.utils.IpUtils;
 import com.lagopusempire.playerlookups.utils.ListPrinter;
 import com.lagopusempire.playerlookups.utils.MetadataUtils;
 import com.lagopusempire.playerlookups.zorascommandsystem.bukkitcompat.CSBukkitCommand;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -178,7 +180,7 @@ public class LookupUUIDCommand implements CSBukkitCommand
             public void run()
             {
                 //ASYNC
-                final List<UUID> uuids = plugin.getUniqueIdsFromName(name);
+                final List<PlayerInfoUnion> uuids = plugin.getUniqueIdsAndDatesFromName(name);
                 final UUID currentNameOwner = plugin.getCurrentUniqueIdUsingName(name);
 
                 Bukkit.getScheduler().runTask(plugin, new Runnable()
@@ -213,11 +215,13 @@ public class LookupUUIDCommand implements CSBukkitCommand
 
                             for (int ii = 0; ii < uuids.size(); ii++)
                             {
-                                String uuid = uuids.get(ii).toString();
+                                String uuid = uuids.get(ii).uuid.toString();
+                                Date date = uuids.get(ii).date;
 
                                 sender.sendMessage(messagePart.dup()
                                         .setUUID(uuid)
                                         .setNumber(ii)
+                                        .setDate(date)
                                         .toString());
 
                                 clipboard.setName(ii, uuid);

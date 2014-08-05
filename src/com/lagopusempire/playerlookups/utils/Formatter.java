@@ -6,6 +6,7 @@
 
 package com.lagopusempire.playerlookups.utils;
 
+import java.util.Date;
 import org.bukkit.ChatColor;
 
 /**
@@ -19,6 +20,7 @@ public class Formatter
     private static final String NAME_STRING = "%name%";
     private static final String IP_STRING = "%ip%";
     private static final String UUID_STRING = "%uuid%";
+    private static final String DATE_STRING = "%date%";
     private static final String NUMBER_STRING = "%#%";
     
     private String message;
@@ -72,6 +74,12 @@ public class Formatter
     public Formatter setNumber(String number)
     {
         this.message = this.message.replaceAll(NUMBER_STRING, number);
+        return this;
+    }
+    
+    public Formatter setDate(Date date)
+    {
+        this.message = this.message.replaceAll(DATE_STRING, date.toString());
         return this;
     }
     

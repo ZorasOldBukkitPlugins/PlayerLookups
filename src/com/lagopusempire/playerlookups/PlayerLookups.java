@@ -193,6 +193,38 @@ public class PlayerLookups extends JavaPlugin implements Listener
             return null;
         }
     }
+    
+    public List<PlayerInfoUnion> getUniqueIdsAndDatesFromName(String name)
+    {
+        final String query = FileParser.getContents("queries/get-uuids-from-name.sql", getClass());
+        try
+        {
+            ResultSet result = connection.query(query)
+                    .setString(name)
+                    .executeReader();
+
+            final List<PlayerInfoUnion> ids = new ArrayList<PlayerInfoUnion>();
+
+            while (result.next())
+            {
+                PlayerInfoUnion info = new PlayerInfoUnion();
+                info.uuid = UUID.fromString(result.getString(1));
+                info.date = result.getDate(2);
+                
+                ids.add(info);
+            }
+
+            result.close();
+
+            return ids;
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     /**
      * Gets a list of ip addresses that the server has seen a uuid use. <b>THIS
