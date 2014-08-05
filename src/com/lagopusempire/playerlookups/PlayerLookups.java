@@ -216,7 +216,7 @@ public class PlayerLookups extends JavaPlugin implements Listener
      * @return A list (oldest at index=0) of names and timestamps that the
      * server has seen a uuid use.
      */
-    public List<PlayerInfoUnion> getUniqueIdsAndDatesFromName(String name)
+    public List<PlayerInfo> getUniqueIdsAndDatesFromName(String name)
     {
         final String query = FileParser.getContents("queries/get-uuids-from-name.sql", getClass());
         try
@@ -225,11 +225,11 @@ public class PlayerLookups extends JavaPlugin implements Listener
                     .setString(name)
                     .executeReader();
 
-            final List<PlayerInfoUnion> ids = new ArrayList<PlayerInfoUnion>();
+            final List<PlayerInfo> ids = new ArrayList<PlayerInfo>();
 
             while (result.next())
             {
-                PlayerInfoUnion info = new PlayerInfoUnion();
+                PlayerInfo info = new PlayerInfo();
                 info.uuid = UUID.fromString(result.getString(1));
                 info.date = result.getDate(2);
 
@@ -256,7 +256,7 @@ public class PlayerLookups extends JavaPlugin implements Listener
      * @return A list (order is not maintained) of ips that the server has seen
      * a uuid use
      */
-    public List<PlayerInfoUnion> getIps(UUID uuid)
+    public List<PlayerInfo> getIps(UUID uuid)
     {
         final String query = FileParser.getContents("queries/get-ips-from-uuid.sql", getClass());
         try
@@ -265,11 +265,11 @@ public class PlayerLookups extends JavaPlugin implements Listener
                     .setString(uuid.toString())
                     .executeReader();
 
-            final List<PlayerInfoUnion> ips = new ArrayList<PlayerInfoUnion>();
+            final List<PlayerInfo> ips = new ArrayList<PlayerInfo>();
 
             while (result.next())
             {
-                PlayerInfoUnion info = new PlayerInfoUnion();
+                PlayerInfo info = new PlayerInfo();
                 info.uuid = uuid;
                 info.ip = result.getString(1);
                 ips.add(info);
@@ -296,7 +296,7 @@ public class PlayerLookups extends JavaPlugin implements Listener
      * uuid, the name and the date the name was last seen used. The names will
      * be in order from oldest to most recent.
      */
-    public List<PlayerInfoUnion> getNames(UUID uuid)
+    public List<PlayerInfo> getNames(UUID uuid)
     {
         final String query = FileParser.getContents("queries/get-names-from-uuid.sql", getClass());
         try
@@ -305,11 +305,11 @@ public class PlayerLookups extends JavaPlugin implements Listener
                     .setString(uuid.toString())
                     .executeReader();
 
-            final List<PlayerInfoUnion> names = new ArrayList<PlayerInfoUnion>();
+            final List<PlayerInfo> names = new ArrayList<PlayerInfo>();
 
             while (result.next())
             {
-                PlayerInfoUnion info = new PlayerInfoUnion();
+                PlayerInfo info = new PlayerInfo();
                 info.uuid = uuid;
                 info.name = result.getString(1);
                 info.date = result.getDate(2);

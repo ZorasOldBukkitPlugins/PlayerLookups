@@ -1,7 +1,7 @@
 package com.lagopusempire.playerlookups.commands;
 
 import com.lagopusempire.playerlookups.Clipboard;
-import com.lagopusempire.playerlookups.PlayerInfoUnion;
+import com.lagopusempire.playerlookups.PlayerInfo;
 import com.lagopusempire.playerlookups.PlayerLookups;
 import com.lagopusempire.playerlookups.utils.Formatter;
 import com.lagopusempire.playerlookups.utils.IpUtils;
@@ -152,7 +152,7 @@ public class LookupUUIDCommand extends PlCommandBase
             public void run()
             {
                 //ASYNC
-                final List<PlayerInfoUnion> uuids = plugin.getUniqueIdsAndDatesFromName(name);
+                final List<PlayerInfo> uuids = plugin.getUniqueIdsAndDatesFromName(name);
                 final UUID currentNameOwner = plugin.getCurrentUniqueIdUsingName(name);
 
                 Bukkit.getScheduler().runTask(plugin, new Runnable()
