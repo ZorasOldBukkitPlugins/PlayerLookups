@@ -7,7 +7,6 @@ import com.lagopusempire.playerlookups.utils.Formatter;
 import com.lagopusempire.playerlookups.utils.IpUtils;
 import com.lagopusempire.playerlookups.utils.ListPrinter;
 import com.lagopusempire.playerlookups.utils.MetadataUtils;
-import com.lagopusempire.playerlookups.zorascommandsystem.bukkitcompat.CSBukkitCommand;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -22,44 +21,38 @@ import static com.lagopusempire.playerlookups.Permissions.CAN_LOOKUP_UUIDS;
  *
  * @author MrZoraman
  */
-public class LookupUUIDCommand implements CSBukkitCommand
+public class LookupUUIDCommand extends PlCommandBase
 {
     /*
      /lookup uuid(s) [ip] - gets a list of uuids an ip has used
      /lookup uuid(s) [name] - gets a list of uuids a name has used
      */
 
-    private final PlayerLookups plugin;
     private final MetadataUtils metadata;
 
     public LookupUUIDCommand(PlayerLookups plugin)
     {
-        this.plugin = plugin;
+        super(plugin);
         this.metadata = new MetadataUtils(plugin);
     }
 
     @Override
     public boolean execute(final CommandSender sender, Player player, String cmdName, String[] preArgs, String[] args)
     {
-        if(CAN_LOOKUP_UUIDS.verify(sender))
+        if (CAN_LOOKUP_UUIDS.verify(sender))
         {
-            if(args.length < 1)
+            if (args.length < 1)
             {
                 sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.not-enough-args"))
                         .colorize()
                         .toString());
-                
-                sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.lookup-uuid-from-ip-command-usage"))
-                        .colorize()
-                        .toString());
-                
-                sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.lookup-uuid-from-name-command-usage"))
-                        .colorize()
-                        .toString());
+
+                printUsage(sender);
+                return true;
             }
             else
             {
-                if(IpUtils.isIpAddress(args[0]))
+                if (IpUtils.isIpAddress(args[0]))
                 {
                     lookupUUIDSfromIp(sender, args[0]);
                 }
@@ -69,14 +62,6 @@ public class LookupUUIDCommand implements CSBukkitCommand
                 }
             }
         }
-        return true;
-    }
-
-    private boolean noPermissions(CommandSender sender)
-    {
-        sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.no-permissions"))
-                .colorize()
-                .toString());
         return true;
     }
 
@@ -191,7 +176,7 @@ public class LookupUUIDCommand implements CSBukkitCommand
                         {
                             player = (Player) sender;
                         }
-                        
+
                         Clipboard clipboard;
 
                         if (player == null)
@@ -238,8 +223,8 @@ public class LookupUUIDCommand implements CSBukkitCommand
                                 clipboard.setName(ii, uuid);
                             }
                         }
-                        
-                        if(currentNameOwner == null)
+
+                        if (currentNameOwner == null)
                         {
                             sender.sendMessage(currentUserMessage
                                     .setUUID("none")
@@ -259,5 +244,17 @@ public class LookupUUIDCommand implements CSBukkitCommand
                 });
             }
         });
+    }
+
+    @Override
+    public void printUsage(CommandSender sender)
+    {
+        sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.lookup-uuid-from-ip-command-usage"))
+                .colorize()
+                .toString());
+
+        sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.lookup-uuid-from-name-command-usage"))
+                .colorize()
+                .toString());
     }
 }
