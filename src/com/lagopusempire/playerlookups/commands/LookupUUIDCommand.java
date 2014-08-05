@@ -1,7 +1,6 @@
 package com.lagopusempire.playerlookups.commands;
 
 import com.lagopusempire.playerlookups.Clipboard;
-import com.lagopusempire.playerlookups.Permissions;
 import com.lagopusempire.playerlookups.PlayerInfoUnion;
 import com.lagopusempire.playerlookups.PlayerLookups;
 import com.lagopusempire.playerlookups.utils.Formatter;
@@ -15,6 +14,8 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import static com.lagopusempire.playerlookups.Permissions.CAN_LOOKUP_UUIDS;
 
 /**
  * Player gives a uuid and gets the ips and names the uuid has been seen using
@@ -40,48 +41,34 @@ public class LookupUUIDCommand implements CSBukkitCommand
     @Override
     public boolean execute(final CommandSender sender, Player player, String cmdName, String[] preArgs, String[] args)
     {
-        if (!Permissions.CAN_LOOKUP_IPS.verify(sender) && !Permissions.CAN_LOOKUP_NAMES.verify(sender))
+        if(CAN_LOOKUP_UUIDS.verify(sender))
         {
-            return noPermissions(sender);
-        }
-
-        if (args.length < 1)
-        {
-            sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.not-enough-args"))
-                    .colorize()
-                    .toString());
-
-            sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.lookup-uuid-command-usage"))
-                    .colorize()
-                    .toString());
-            return true;
-        }
-
-        final String input = args[0];
-
-        if (IpUtils.isIpAddress(input))
-        {
-            if (Permissions.CAN_LOOKUP_IPS.verify(sender))
+            if(args.length < 1)
             {
-                lookupUUIDSfromIp(sender, input);
+                sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.not-enough-args"))
+                        .colorize()
+                        .toString());
+                
+                sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.lookup-uuid-from-ip-command-usage"))
+                        .colorize()
+                        .toString());
+                
+                sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.lookup-uuid-from-name-command-usage"))
+                        .colorize()
+                        .toString());
             }
             else
             {
-                return noPermissions(sender);
+                if(IpUtils.isIpAddress(args[0]))
+                {
+                    lookupUUIDSfromIp(sender, args[0]);
+                }
+                else
+                {
+                    lookupUUIDSfromName(sender, args[0]);
+                }
             }
         }
-        else
-        {
-            if (Permissions.CAN_LOOKUP_NAMES.verify(sender))
-            {
-                lookupUUIDSfromName(sender, input);
-            }
-            else
-            {
-                return noPermissions(sender);
-            }
-        }
-
         return true;
     }
 

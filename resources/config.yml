@@ -8,9 +8,8 @@ mysql:
 strings:
   no-permissions: '&cYou don''t have permission to do that!'
   not-enough-args: '&cNot enough arguments!'
-  lookup-uuid-command-usage: |
-    '&6/lookup uuid &b[ip]&9 - &aGet a list of ips that have been used by a uuid
-    '&6/lookup uuid &b[name]&9 - &aGet a list of names that have been used by a uuid
+  lookup-uuid-from-ip-command-usage: '&6/lookup uuid &b[ip]&9 - &aGet a list of ips that have been used by a uuid'
+  lookup-uuid-from-name-command-usage: '&6/lookup uuid &b[name]&9 - &aGet a list of names that have been used by a uuid'
   uuids-from-ip-result-header: '&6UUIDS that have used the ip &b%ip%&6:'
   uuids-from-ip-result: '&f[%#%] &6%uuid%'
   uuids-from-name-result-header: '&6UUIDS that have used the name &b%name%&6:'
