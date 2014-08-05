@@ -44,6 +44,7 @@
                     <include>LICENSE.txt</include>
                     <include>config.yml</include>
                     <include>plugin.yml</include>
+                    <include>messages.yml</include>
                 </includes>
             </resource>
             <resource>

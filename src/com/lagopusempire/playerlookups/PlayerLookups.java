@@ -11,6 +11,7 @@ import com.lagopusempire.playerlookups.mysql.MySqlConnection;
 import com.lagopusempire.playerlookups.mysql.MySqlCreds;
 import com.lagopusempire.playerlookups.utils.IUpdateTask;
 import com.lagopusempire.playerlookups.utils.SequentialUpdater;
+import com.lagopusempire.playerlookups.utils.files.ConfigAccessor;
 import com.lagopusempire.playerlookups.utils.files.FileParser;
 import com.lagopusempire.playerlookups.zorascommandsystem.bukkitcompat.BukkitCommandSystem;
 import java.net.InetAddress;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -33,6 +35,7 @@ public class PlayerLookups extends JavaPlugin implements Listener
     private final BukkitCommandSystem cs;
 
     private MySqlConnection connection;
+    private ConfigAccessor messages;
 
     public PlayerLookups()
     {
@@ -45,6 +48,10 @@ public class PlayerLookups extends JavaPlugin implements Listener
     {
         getConfig().options().copyDefaults(true);
         saveConfig();
+        
+        messages = new ConfigAccessor(this, "messages.yml");
+        messages.getConfig().options().copyDefaults(true);
+        messages.saveConfig();
 
         final MySqlCreds creds = new MySqlCreds(
                 getConfig().getString("mysql.host"),
@@ -69,6 +76,11 @@ public class PlayerLookups extends JavaPlugin implements Listener
 
         getServer().getPluginManager().registerEvents(new PlayerLoginListener(connection), this);
         getServer().getPluginManager().registerEvents(new CommandListener(this), this);
+    }
+    
+    public FileConfiguration getMessages()
+    {
+        return messages.getConfig();
     }
 
     @Override

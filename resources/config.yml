@@ -5,14 +5,3 @@ mysql:
   user: eclipse
   password: maggots
   schema-version: 0
-strings:
-  no-permissions: '&cYou don''t have permission to do that!'
-  not-enough-args: '&cNot enough arguments!'
-  lookup-uuid-from-ip-command-usage: '&6/lookup uuid &b[ip]&9 - &aGet a list of ips that have been used by a uuid'
-  lookup-uuid-from-name-command-usage: '&6/lookup uuid &b[name]&9 - &aGet a list of names that have been used by a uuid'
-  uuids-from-ip-result-header: '&6UUIDS that have used the ip &b%ip%&6:'
-  uuids-from-ip-result: '&f[%#%] &6%uuid%'
-  uuids-from-name-result-header: '&6UUIDS that have used the name &b%name%&6:'
-  uuids-from-name-result: '&f[%#%] &6%uuid% &3[%date%]'
-  uuids-from-name-current: '&f[%#%] &7The current uuid that is using this name is: &6%uuid%'
-  help-header: '&2PlayerLookups help'

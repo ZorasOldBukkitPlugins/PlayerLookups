@@ -25,7 +25,7 @@ public class HelpCommand extends PlCommandBase
     @Override
     public boolean execute(CommandSender sender, Player player, String cmdName, String[] preArgs, String[] args)
     {
-        sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.help-header"))
+        sender.sendMessage(new Formatter(plugin.getMessages().getString("help-header"))
                 .colorize()
                 .toString());
         

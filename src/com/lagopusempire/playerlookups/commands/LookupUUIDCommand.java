@@ -43,7 +43,7 @@ public class LookupUUIDCommand extends PlCommandBase
         {
             if (args.length < 1)
             {
-                sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.not-enough-args"))
+                sender.sendMessage(new Formatter(plugin.getMessages().getString("not-enough-args"))
                         .colorize()
                         .toString());
 
@@ -82,11 +82,11 @@ public class LookupUUIDCommand extends PlCommandBase
                     public void run()
                     {
                         //SYNC
-                        Formatter header = new Formatter(plugin.getConfig().getString("strings.uuids-from-ip-result-header"))
+                        Formatter header = new Formatter(plugin.getMessages().getString("uuids-from-ip-result-header"))
                                 .setIp(ip)
                                 .colorize();
 
-                        Formatter messagePart = new Formatter(plugin.getConfig().getString("strings.uuids-from-ip-result"))
+                        Formatter messagePart = new Formatter(plugin.getMessages().getString("uuids-from-ip-result"))
                                 .colorize();
 
                         Player player = null;
@@ -161,14 +161,14 @@ public class LookupUUIDCommand extends PlCommandBase
                     public void run()
                     {
                         //SYNC
-                        Formatter header = new Formatter(plugin.getConfig().getString("strings.uuids-from-name-result-header"))
+                        Formatter header = new Formatter(plugin.getMessages().getString("uuids-from-name-result-header"))
                                 .setName(name)
                                 .colorize();
 
-                        Formatter messagePart = new Formatter(plugin.getConfig().getString("strings.uuids-from-name-result"))
+                        Formatter messagePart = new Formatter(plugin.getMessages().getString("uuids-from-name-result"))
                                 .colorize();
 
-                        Formatter currentUserMessage = new Formatter(plugin.getConfig().getString("strings.uuids-from-name-current"))
+                        Formatter currentUserMessage = new Formatter(plugin.getMessages().getString("uuids-from-name-current"))
                                 .colorize();
 
                         Player player = null;
@@ -249,11 +249,11 @@ public class LookupUUIDCommand extends PlCommandBase
     @Override
     public void printUsage(CommandSender sender)
     {
-        sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.lookup-uuid-from-ip-command-usage"))
+        sender.sendMessage(new Formatter(plugin.getMessages().getString("lookup-uuid-from-ip-command-usage"))
                 .colorize()
                 .toString());
 
-        sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.lookup-uuid-from-name-command-usage"))
+        sender.sendMessage(new Formatter(plugin.getMessages().getString("lookup-uuid-from-name-command-usage"))
                 .colorize()
                 .toString());
     }

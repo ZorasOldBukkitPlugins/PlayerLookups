@@ -23,7 +23,7 @@ public abstract class PlCommandBase implements CSBukkitCommand
     
     protected boolean noPermissions(CommandSender sender)
     {
-        sender.sendMessage(new Formatter(plugin.getConfig().getString("strings.no-permissions"))
+        sender.sendMessage(new Formatter(plugin.getMessages().getString("no-permissions"))
                 .colorize()
                 .toString());
         return true;
