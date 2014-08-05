@@ -61,21 +61,22 @@ public class PlayerLookups extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(new PlayerLoginListener(connection), this);
         getServer().getPluginManager().registerEvents(new CommandListener(this), this);
     }
-    
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args)
     {
         System.out.println("Command recieved: " + cmd.getName());
-        for(int ii = 0; ii < args.length; ii++)
+        for (int ii = 0; ii < args.length; ii++)
         {
             System.out.print(" " + args[ii]);
         }
-        
+
         return true;
     }
-    
+
     /**
      * See {@link #getUniqueIdsFromIp(java.lang.String)}
+     *
      * @param addr The address to check
      * @return A list of ips that have used the given address
      */
@@ -83,12 +84,14 @@ public class PlayerLookups extends JavaPlugin implements Listener
     {
         return getUniqueIdsFromIp(addr.toString().substring(1));
     }
-    
+
     /**
      * Gets a list of unique ids the server has seen a certain ip use. <b>THIS
      * IS A BLOCKING THREAD!</b>
+     *
      * @param ip The ip address to check
-     * @return  A list (order not important) of UUIDS that have used the given ip address
+     * @return A list (order not important) of UUIDS that have used the given ip
+     * address
      */
     public List<UUID> getUniqueIdsFromIp(String ip)
     {
@@ -117,10 +120,11 @@ public class PlayerLookups extends JavaPlugin implements Listener
             return null;
         }
     }
-    
+
     /**
-     * Uses evilmidget38's uuidfetcher to get a uuid given a player name. <b>THIS
-     * IS A BLOCKING THREAD!</b>
+     * Uses evilmidget38's uuidfetcher to get a uuid given a player name.
+     * <b>THIS IS A BLOCKING THREAD!</b>
+     *
      * @param name The name of the player
      * @return The player's uuid
      */
@@ -137,10 +141,11 @@ public class PlayerLookups extends JavaPlugin implements Listener
             return null;
         }
     }
-    
+
     /**
-     * Uses evilmidget38's namefetcher to get a name given a uuid. <b>THIS
-     * IS A BLOCKING THREAD!</b>
+     * Uses evilmidget38's namefetcher to get a name given a uuid. <b>THIS IS A
+     * BLOCKING THREAD!</b>
+     *
      * @param uuid The uud to lookup
      * @return The current name the uuid is using
      */
@@ -159,8 +164,8 @@ public class PlayerLookups extends JavaPlugin implements Listener
     }
 
     /**
-     * Gets a list of unique ids the server has seen use a certain name use. <b>THIS
-     * IS A BLOCKING THREAD!</b>
+     * Gets a list of unique ids the server has seen use a certain name use.
+     * <b>THIS IS A BLOCKING THREAD!</b>
      *
      * @param name The name to check
      * @return A list (order not important) of UUIDS that have used the given
@@ -193,7 +198,15 @@ public class PlayerLookups extends JavaPlugin implements Listener
             return null;
         }
     }
-    
+
+    /**
+     * Gets a list of names and the date the server has last seen the name given
+     * a uuid. <b>THIS IS A BLOCKING THREAD!</b>
+     *
+     * @param name The name to lookup
+     * @return A list (oldest at index=0) of names and timestamps that the
+     * server has seen a uuid use.
+     */
     public List<PlayerInfoUnion> getUniqueIdsAndDatesFromName(String name)
     {
         final String query = FileParser.getContents("queries/get-uuids-from-name.sql", getClass());
@@ -210,7 +223,7 @@ public class PlayerLookups extends JavaPlugin implements Listener
                 PlayerInfoUnion info = new PlayerInfoUnion();
                 info.uuid = UUID.fromString(result.getString(1));
                 info.date = result.getDate(2);
-                
+
                 ids.add(info);
             }
 
@@ -231,8 +244,8 @@ public class PlayerLookups extends JavaPlugin implements Listener
      * IS A BLOCKING THREAD!</b>
      *
      * @param uuid The uuid to check
-     * @return A list (order is not maintained) of ips that the server has seen a
-     * uuid use
+     * @return A list (order is not maintained) of ips that the server has seen
+     * a uuid use
      */
     public List<PlayerInfoUnion> getIps(UUID uuid)
     {
@@ -327,7 +340,7 @@ public class PlayerLookups extends JavaPlugin implements Listener
                 query = FileParser.getContents("queries/create-pl_ips-table.sql", PlayerLookups.class);
                 conn.query(query).executeUpdate();
                 getLogger().info("pl_ips table created successfully.");
-                
+
                 query = FileParser.getContents("queries/drop-pl_add_player-procedure.sql", PlayerLookups.class);
                 conn.query(query).executeUpdate();
 
