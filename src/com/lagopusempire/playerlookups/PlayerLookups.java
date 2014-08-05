@@ -1,6 +1,8 @@
 package com.lagopusempire.playerlookups;
 
+import com.lagopusempire.playerlookups.commands.HelpCommand;
 import com.lagopusempire.playerlookups.commands.LookupUUIDCommand;
+import com.lagopusempire.playerlookups.commands.PlCommandBase;
 import com.lagopusempire.playerlookups.evilmidget38.NameFetcher;
 import com.lagopusempire.playerlookups.evilmidget38.UUIDFetcher;
 import com.lagopusempire.playerlookups.listeners.CommandListener;
@@ -55,8 +57,15 @@ public class PlayerLookups extends JavaPlugin implements Listener
         int schemaVersion = updateSchema(getConfig().getInt("mysql.schema-version", 0), connection);
         getConfig().set("mysql.schema-version", schemaVersion);
         saveConfig();
-
-        cs.registerCommand("lookup uuid", new LookupUUIDCommand(this));
+        
+        HelpCommand helpCmd = new HelpCommand(this);
+        
+        PlCommandBase cmd = new LookupUUIDCommand(this);
+        helpCmd.addCommand(cmd);
+        cs.registerCommand("lookup {uuid|uuids}", cmd);
+        
+        cs.registerCommand("lookup {help|?}", helpCmd);
+        cs.registerCommand("lookup", helpCmd);
 
         getServer().getPluginManager().registerEvents(new PlayerLoginListener(connection), this);
         getServer().getPluginManager().registerEvents(new CommandListener(this), this);

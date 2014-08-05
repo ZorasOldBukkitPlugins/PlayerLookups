@@ -11,7 +11,8 @@ public enum Permissions
 {
     CAN_LOOKUP_UUIDS("playerlookups.uuids"),
     CAN_LOOKUP_NAMES("playerlookups.names"),
-    CAN_LOOKUP_IPS("playerlookups.ips");
+    CAN_LOOKUP_IPS("playerlookups.ips"),
+    VIEW_HELP("playerlookups.help");
     
     private final String node;
     
