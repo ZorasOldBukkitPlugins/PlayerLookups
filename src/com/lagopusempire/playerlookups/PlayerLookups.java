@@ -1,6 +1,7 @@
 package com.lagopusempire.playerlookups;
 
 import com.lagopusempire.playerlookups.commands.HelpCommand;
+import com.lagopusempire.playerlookups.commands.LookupNameCommand;
 import com.lagopusempire.playerlookups.commands.LookupUUIDCommand;
 import com.lagopusempire.playerlookups.commands.PlCommandBase;
 import com.lagopusempire.playerlookups.evilmidget38.NameFetcher;
@@ -70,6 +71,10 @@ public class PlayerLookups extends JavaPlugin implements Listener
         PlCommandBase cmd = new LookupUUIDCommand(this);
         helpCmd.addCommand(cmd);
         cs.registerCommand("lookup {uuid|uuids}", cmd);
+        
+        cmd = new LookupNameCommand(this);
+        helpCmd.addCommand(cmd);
+        cs.registerCommand("lookup {name|names}", cmd);
         
         cs.registerCommand("lookup {help|?}", helpCmd);
         cs.registerCommand("lookup", helpCmd);
