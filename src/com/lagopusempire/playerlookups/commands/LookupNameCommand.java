@@ -1,6 +1,7 @@
 package com.lagopusempire.playerlookups.commands;
 
 import com.lagopusempire.playerlookups.Clipboard;
+import com.lagopusempire.playerlookups.MojangServerResult;
 import com.lagopusempire.playerlookups.Permissions;
 import com.lagopusempire.playerlookups.PlayerInfo;
 import com.lagopusempire.playerlookups.PlayerLookups;
@@ -55,7 +56,7 @@ public class LookupNameCommand extends PlCommandBase
                     .colorize()
                     .toString());
             printUsage(sender);
-            
+
             System.out.println("(got: " + uuidString + ")");
             return true;
         }
@@ -68,21 +69,21 @@ public class LookupNameCommand extends PlCommandBase
                 //ASYNC
                 UUID uuid = UUID.fromString(uuidString);
                 final List<PlayerInfo> names = plugin.getNames(uuid);
-                final String currentName = plugin.getCurrentNameUsingUUID(uuid);
+                final MojangServerResult result = plugin.getCurrentNameUsingUUID(uuid);
 
                 Bukkit.getScheduler().runTask(plugin, new Runnable()
                 {
                     @Override
                     public void run()
                     {
-                        //SYNC
+                        //SYNC                        
                         Formatter header = new Formatter(plugin.getMessages().getString("names-from-uuid-result-header"))
                                 .setUUID(uuidString)
                                 .colorize();
 
                         Formatter messagePart = new Formatter(plugin.getMessages().getString("names-from-uuid-result"))
                                 .colorize();
-                        
+
                         Formatter currentUserMessage = new Formatter(plugin.getMessages().getString("names-from-uuid-current"))
                                 .colorize();
 
@@ -117,21 +118,32 @@ public class LookupNameCommand extends PlCommandBase
                         {
                             metadata.setMetadata(player, "lookup_pages", names);
                         }
-                        
-                        if(currentName == null)
+
+                        if (result.failed)
                         {
-                            sender.sendMessage(currentUserMessage
-                                    .setName("none")
-                                    .setNumber("X")
-                                    .toString());
+                            String message = new Formatter(plugin.getMessages().getString("external-server-failure"))
+                                    .colorize()
+                                    .toString();
+
+                            sender.sendMessage(message);
                         }
                         else
                         {
-                            clipboard.setName(names.size(), currentName);
-                            sender.sendMessage(currentUserMessage
-                                    .setName(currentName)
-                                    .setNumber(names.size())
-                                    .toString());
+                            if (result.name == null)
+                            {
+                                sender.sendMessage(currentUserMessage
+                                        .setName("none")
+                                        .setNumber("X")
+                                        .toString());
+                            }
+                            else
+                            {
+                                clipboard.setName(names.size(), result.name);
+                                sender.sendMessage(currentUserMessage
+                                        .setName(result.name)
+                                        .setNumber(names.size())
+                                        .toString());
+                            }
                         }
                     }
                 });

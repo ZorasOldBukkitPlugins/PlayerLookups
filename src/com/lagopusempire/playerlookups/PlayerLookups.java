@@ -15,6 +15,7 @@ import com.lagopusempire.playerlookups.utils.SequentialUpdater;
 import com.lagopusempire.playerlookups.utils.files.ConfigAccessor;
 import com.lagopusempire.playerlookups.utils.files.FileParser;
 import com.lagopusempire.playerlookups.zorascommandsystem.bukkitcompat.BukkitCommandSystem;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -152,14 +153,23 @@ public class PlayerLookups extends JavaPlugin implements Listener
      * <b>THIS IS A BLOCKING THREAD!</b>
      *
      * @param name The name of the player
-     * @return The player's uuid
+     * @return An instance that contains the name, the uuid currently using that name and whether the request failed or not.
      */
-    public UUID getCurrentUniqueIdUsingName(String name)
+    public MojangServerResult getCurrentUniqueIdUsingName(String name)
     {
         final UUIDFetcher fetcher = new UUIDFetcher(Arrays.asList(name));
+        MojangServerResult result = new MojangServerResult();
         try
         {
-            return fetcher.call().get(name);
+            result.uuid = fetcher.call().get(name);
+            result.name = name;
+            return result;
+        }
+        catch (IOException e)
+        {
+            result.failed = true;
+            getLogger().warning("Failed to retrieve uuid info from external server: " + e.getMessage());
+            return result;
         }
         catch (Exception e)
         {
@@ -173,14 +183,23 @@ public class PlayerLookups extends JavaPlugin implements Listener
      * BLOCKING THREAD!</b>
      *
      * @param uuid The uud to lookup
-     * @return The current name the uuid is using
+     * @return An instance that contains the uuid, the name currently using that uuid and whether the request failed or not.
      */
-    public String getCurrentNameUsingUUID(UUID uuid)
+    public MojangServerResult getCurrentNameUsingUUID(UUID uuid)
     {
         final NameFetcher fetcher = new NameFetcher(Arrays.asList(uuid));
+        MojangServerResult result = new MojangServerResult();
         try
         {
-            return fetcher.call().get(uuid);
+            result.name = fetcher.call().get(uuid);
+            result.uuid = uuid;
+            return result;
+        }
+        catch (IOException e)
+        {
+            result.failed = true;
+            getLogger().warning("Failed to retrieve uuid info from external server: " + e.getMessage());
+            return result;
         }
         catch (Exception e)
         {

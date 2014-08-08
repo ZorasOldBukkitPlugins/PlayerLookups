@@ -1,6 +1,8 @@
 package com.lagopusempire.playerlookups.commands;
 
 import com.lagopusempire.playerlookups.Clipboard;
+import com.lagopusempire.playerlookups.MojangServerResult;
+import static com.lagopusempire.playerlookups.Permissions.CAN_LOOKUP_UUIDS;
 import com.lagopusempire.playerlookups.PlayerInfo;
 import com.lagopusempire.playerlookups.PlayerLookups;
 import com.lagopusempire.playerlookups.utils.Formatter;
@@ -13,8 +15,6 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import static com.lagopusempire.playerlookups.Permissions.CAN_LOOKUP_UUIDS;
 
 /**
  * Player gives a uuid and gets the ips and names the uuid has been seen using
@@ -153,7 +153,7 @@ public class LookupUUIDCommand extends PlCommandBase
             {
                 //ASYNC
                 final List<PlayerInfo> uuids = plugin.getUniqueIdsAndDatesFromName(name);
-                final UUID currentNameOwner = plugin.getCurrentUniqueIdUsingName(name);
+                final MojangServerResult result = plugin.getCurrentUniqueIdUsingName(name);
 
                 Bukkit.getScheduler().runTask(plugin, new Runnable()
                 {
@@ -224,21 +224,32 @@ public class LookupUUIDCommand extends PlCommandBase
                             }
                         }
 
-                        if (currentNameOwner == null)
+                        if (result.failed)
                         {
-                            sender.sendMessage(currentUserMessage
-                                    .setUUID("none")
-                                    .setNumber("X")
-                                    .toString());
+                            String message = new Formatter(plugin.getMessages().getString("external-server-failure"))
+                                    .colorize()
+                                    .toString();
+
+                            sender.sendMessage(message);
                         }
                         else
                         {
-                            clipboard.setUUID(uuids.size(), currentNameOwner.toString());
+                            if (result.uuid == null)
+                            {
+                                sender.sendMessage(currentUserMessage
+                                        .setUUID("none")
+                                        .setNumber("X")
+                                        .toString());
+                            }
+                            else
+                            {
+                                clipboard.setUUID(uuids.size(), result.uuid.toString());
 
-                            sender.sendMessage(currentUserMessage
-                                    .setUUID(currentNameOwner.toString())
-                                    .setNumber(uuids.size())
-                                    .toString());
+                                sender.sendMessage(currentUserMessage
+                                        .setUUID(result.uuid.toString())
+                                        .setNumber(uuids.size())
+                                        .toString());
+                            }
                         }
                     }
                 });

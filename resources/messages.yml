@@ -13,3 +13,4 @@ names-from-uuid-command-usage: '&6/lookup name &b[uuid]&9 - &aGeta list of names
 names-from-uuid-current: '&f[%#%] &7The current name that is using this uuid is: &6%name%'
 help-header: '&2PlayerLookups help'
 must-be-uuid: '&cYou must input a uuid!'
+external-server-failure: '&cFailed to retrieve info from mojang''s servers! Please try again later...'
